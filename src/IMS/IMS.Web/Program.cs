@@ -1,4 +1,5 @@
 using IMS.Infrastructure.Data;
+using IMS.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -13,6 +14,12 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+
+    // Add services to the container.
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    //-----Get Migration Assembly-------
+    var migrationAssembly = Assembly.GetAssembly(typeof(ApplicationDbContext));
+
     #region Serilog Configuration
     builder.Host.UseSerilog((context, lc) => lc
         .MinimumLevel.Debug()
@@ -22,15 +29,9 @@ try
     );
     #endregion
 
-    // Add services to the container.
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-    
-    //-----Get Migration Assembly-------
-    var migrationAssembly = Assembly.GetAssembly(typeof(ApplicationDbContext));
-
-    //-----Dependency Injection For DbContext-------
-    builder.Services.AddScoped<ApplicationDbContext>(s =>
-        new ApplicationDbContext(connectionString, migrationAssembly?.FullName));
+    #region Service Collection based Dependency Injection Configuration
+    builder.Services.AddDependencyInjection();
+    #endregion
 
     //--------Add DbContext-----------
     builder.Services.AddDbContext<ApplicationDbContext>(options =>

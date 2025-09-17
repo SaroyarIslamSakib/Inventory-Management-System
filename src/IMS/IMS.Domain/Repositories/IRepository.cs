@@ -1,32 +1,27 @@
 ﻿using IMS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IMS.Domain.Repositories
 {
-    public interface IRepository<TEntity, TKey>
-        where TEntity : class, IAggregateRoot<TKey>
-        where TKey : IComparable<TKey> 
+    public interface IRepository<TAggregateRoot, TKey>
+        where TAggregateRoot : class, IAggregateRoot<TKey>
+        where TKey : IComparable
     {
-        void Add(TEntity entity);
-        Task AddAsync(TEntity entity);
-        void Edit(TEntity entityToUpdate);
-        IList<TEntity> GetAll();
-        Task<IList<TEntity>> GetAllAsync();
-        TEntity GetById(TKey id);
-        Task<TEntity> GetByIdAsync(TKey id);
-        int GetCount(Expression<Func<TEntity, bool>> filter = null);
-        Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null);
-        void Remove(Expression<Func<TEntity, bool>> filter);
-        void Remove(TEntity entityToDelete);
+        void Add(TAggregateRoot entity);
+        Task AddAsync(TAggregateRoot entity);
+        void Edit(TAggregateRoot entityToUpdate);
+        IList<TAggregateRoot> GetAll();
+        Task<IList<TAggregateRoot>> GetAllAsync();
+        TAggregateRoot GetById(TKey id);
+        Task<TAggregateRoot> GetByIdAsync(TKey id);
+        int GetCount(Expression<Func<TAggregateRoot, bool>> filter = null);
+        Task<int> GetCountAsync(Expression<Func<TAggregateRoot, bool>> filter = null);
+        void Remove(Expression<Func<TAggregateRoot, bool>> filter);
+        void Remove(TAggregateRoot entityToDelete);
         void Remove(TKey id);
-        void Update(TEntity entity);
-        Task RemoveAsync(Expression<Func<TEntity, bool>> filter);
-        Task RemoveAsync(TEntity entityToDelete);
+        void Update(TAggregateRoot entity);
+        Task RemoveAsync(Expression<Func<TAggregateRoot, bool>> filter);
+        Task RemoveAsync(TAggregateRoot entityToDelete);
         Task RemoveAsync(TKey id);
     }
 }
