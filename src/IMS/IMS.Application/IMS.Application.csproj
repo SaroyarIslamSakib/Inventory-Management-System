@@ -10,4 +10,8 @@
     <ProjectReference Include="..\IMS.Domain\IMS.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Cortex.Mediator" Version="1.7.0" />
+  </ItemGroup>
+
 </Project>

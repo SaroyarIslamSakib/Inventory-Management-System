@@ -1,3 +1,5 @@
+using Cortex.Mediator.DependencyInjection;
+using IMS.Application.Features.Inventory.Commands;
 using IMS.Infrastructure.Data;
 using IMS.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +33,14 @@ try
 
     #region Service Collection based Dependency Injection Configuration
     builder.Services.AddDependencyInjection();
+    #endregion
+
+    #region Mediator Configuration
+    builder.Services.AddCortexMediator(
+        builder.Configuration,
+        new[] { typeof(Program), typeof(ProductAddCommand) },
+        options => options.AddDefaultBehaviors()
+        );
     #endregion
 
     //--------Add DbContext-----------

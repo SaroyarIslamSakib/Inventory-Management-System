@@ -1,5 +1,9 @@
 using System.Diagnostics;
+using Cortex.Mediator;
+using IMS.Application.Features.Inventory.Commands;
+using IMS.Application.Features.Inventory.Queries;
 using IMS.Domain;
+using IMS.Domain.Entities;
 using IMS.Infrastructure.Data;
 using IMS.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,22 +14,25 @@ namespace IMS.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IApplicationUnitOfWork _unitOfWork;
+        private readonly IMediator _mediator;
 
-        public HomeController(ILogger<HomeController> logger, IApplicationUnitOfWork unitOfWork)
+        public HomeController(ILogger<HomeController> logger, IMediator mediator)
         {
             _logger = logger;
-            _unitOfWork = unitOfWork;
+            _mediator = mediator;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //_unitOfWork.ProductRepository.Add(new Domain.Entities.Product
+            //var command = new ProductAddCommand
             //{
-            //    Id = Guid.NewGuid(),
-            //    Name = "Monitor",
-            //    Price = 40000
-            //});
-            //_unitOfWork.Save();
+            //    Name = "Ram",
+            //    Price = 2500
+            //};
+            //var product =await _mediator.SendCommandAsync<ProductAddCommand, Product>(command);     
+
+            var query = new ProductGetQuery { Id = new Guid("43FF2D14-160E-4EF3-8E21-FD87DC9C3964") };
+            var result = await _mediator.SendQueryAsync<ProductGetQuery, Product>(query);
             return View();
         }
 
