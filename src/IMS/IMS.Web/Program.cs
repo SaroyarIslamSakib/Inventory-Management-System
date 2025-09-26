@@ -1,7 +1,10 @@
 using Cortex.Mediator.DependencyInjection;
 using IMS.Application.Features.Inventory.Commands;
+using IMS.Infrastructure;
 using IMS.Infrastructure.Data;
 using IMS.Infrastructure.Extensions;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -27,21 +30,38 @@ try
         .MinimumLevel.Debug()
         .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
         .Enrich.FromLogContext()
-        .ReadFrom.Configuration(builder.Configuration)
+        .ReadFrom.Configuration(context.Configuration)
     );
-    #endregion
 
-    #region Service Collection based Dependency Injection Configuration
-    builder.Services.AddDependencyInjection();
     #endregion
 
     #region Mediator Configuration
+
     builder.Services.AddCortexMediator(
         builder.Configuration,
         new[] { typeof(Program), typeof(ProductAddCommand) },
         options => options.AddDefaultBehaviors()
-        );
+    );
+
+
     #endregion
+
+    #region Mapster Configuration
+    // Custom configuration
+    //var config = TypeAdapterConfig.GlobalSettings;
+    //config.Scan(typeof(MapsterConfiguration).Assembly);
+    //builder.Services.AddSingleton(config);
+    //builder.Services.AddScoped<IMapper, ServiceMapper>();
+
+    // Default configuration
+    builder.Services.AddMapster();
+    #endregion
+
+
+    #region Service collection based dependency injection Configuration
+    builder.Services.AddDependencyInjection();
+    #endregion
+
 
     //--------Add DbContext-----------
     builder.Services.AddDbContext<ApplicationDbContext>(options =>

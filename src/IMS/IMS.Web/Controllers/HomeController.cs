@@ -24,15 +24,15 @@ namespace IMS.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var command = new ProductAddCommand
-            //{
-            //    Name = "Ram",
-            //    Price = 2500
-            //};
-            //var product =await _mediator.SendCommandAsync<ProductAddCommand, Product>(command);     
+            var command = new ProductAddCommand
+            {
+                Name = "Gaming Kits",
+                Price = 3000
+            };
+            var product = await _mediator.SendCommandAsync<ProductAddCommand, Product>(command);
 
-            var query = new ProductGetQuery { Id = new Guid("43FF2D14-160E-4EF3-8E21-FD87DC9C3964") };
-            var result = await _mediator.SendQueryAsync<ProductGetQuery, Product>(query);
+            //var query = new ProductGetQuery { Id = new Guid("43FF2D14-160E-4EF3-8E21-FD87DC9C3964") };
+            //var result = await _mediator.SendQueryAsync<ProductGetQuery, Product>(query);
             return View();
         }
 
